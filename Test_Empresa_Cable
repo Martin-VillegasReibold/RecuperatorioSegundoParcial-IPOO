@@ -1,0 +1,74 @@
+<?php
+include_once ("EmpresaCable.php");
+include_once ("Contrato.php");
+include_once ("ContratoWeb.php");
+include_once ("ContratoMostrador.php");
+include_once ("Plan.php");
+include_once ("Canal.php");
+include_once ("Cliente.php");
+//A
+echo ".\n";
+$empresaCable = new EmpresaCable([], []);
+
+//B
+echo ".\n";
+$canal1 = new Canal("noticias", 100, true, true);
+$canal2 = new Canal("deportivo", 150, false, true);
+$canal3 = new Canal("infantil", 70, true, true);
+
+//C
+echo ".\n";
+$arreglo1 = [$canal1, $canal2];
+$arreglo2 = [$canal3];
+$plan1 = new Plan(111, $arreglo1, 1000);
+$plan2 = new Plan(123, $arreglo2, 1000);
+
+//D
+echo ".\n";
+$cliente = new Cliente(12345678, "Martin", "Villegas");
+
+//E
+echo ".\n";
+$fechaInicio1 = date('d-m-Y');
+$fechaVencimiento1 = date('d-m-Y', strtotime($fechaInicio1 . "+ 1 month"));
+
+$contrato1 = new ContratoWeb($fechaInicio1, $fechaVencimiento1, $plan1, "Al dia", 0, true, $cliente);
+$contrato2 = new ContratoWeb($fechaInicio1, $fechaVencimiento1, $plan2, "Al dia", 0, true, $cliente);
+$contrato3 = new ContratoMostrador($fechaInicio1, $fechaVencimiento1, $plan1, "Al dia", 0, true, $cliente);
+
+//F
+echo ".\n";
+echo "$" . $contrato1->calcularImporte() . "\n";
+echo "$" . $contrato2->calcularImporte() . "\n";
+echo "$" . $contrato3->calcularImporte() . "\n";
+
+//G
+echo ".\n";
+echo ($empresaCable->incorporarPlan($plan1)) ? "EXITO\n" : "ERROR\n";
+
+//H
+echo ".\n";
+
+echo ($empresaCable->incorporarPlan($plan2)) ? "EXITO\n" : "ERROR\n";
+
+//I
+echo ".\n";
+$fechaInicio2 = date('d-m-Y');
+$fechaVencimiento2 = date('d-m-Y', strtotime($fechaInicio2 . "+ 1 month"));
+$empresaCable->incorporarContrato($plan2, $cliente, $fechaInicio2, $fechaVencimiento2, false);
+
+//J
+echo ".\n";
+$empresaCable->incorporarContrato($plan1, $cliente, $fechaInicio2, $fechaVencimiento2, true);
+
+//K
+echo ".\n";
+echo "$" . $empresaCable->pagarContrato($contrato3) . "\n";
+
+//L
+echo ".\n";
+echo "$" . $empresaCable->pagarContrato($contrato1) . "\n";
+
+//M
+echo ".\n";
+echo "$" . $empresaCable->retornarImporteContratos(111);
